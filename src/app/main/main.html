@@ -1,3 +1,8 @@
+<style>
+*:focus {
+    outline: none;
+}
+</style>
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="wrapper wrapper-content">
     <div class="row">
@@ -8,16 +13,29 @@
               <div class="space-25"></div>
 
               <div ng-repeat="group in serviceGroups">
-                <h5>{{group.name}}</h5>
+                <div class="btn-group dropdown" uib-dropdown="">
+                    <button type="button" style="border-color:{{group.color}}; color:#fff;background-color: {{group.color}}"
+                            class="btn btn-primary btn-xm dropdown-toggle" uib-dropdown-toggle="" aria-haspopup="true" aria-expanded="false">
+                        {{group.name}} <span class="caret"></span>
+                    </button>
+                    <ul role="menu" uib-dropdown-menu="" class="dropdown-menu">
+                        <li><a ng-click="startGroup(group)">Start All</a></li>
+                        <li><a ng-click="stopGroup(group)">Stop All</a></li>
+                    </ul>
+                </div>
+                <!-- <h4 ><span class="label" style="font-size: 15px; color:#fff;background-color: {{group.color}}">{{group.name}}</span></h4> -->
 
                 <ul class="category-list m-b-md" style="padding: 0">
 
                   <li ng-repeat="service in group.services | orderBy: Name">
-                    <a ng-click="main.selectedService = service"> <i class="fa fa-circle text-navy"></i> {{service.ShortName}} <span class="label label-warning pull-right"></span> </a>
+                  <a style="display:block; border:0px solid red" ng-click="main.selectedService = service" ng-style="{'font-weight': service === main.selectedService ? 'bold' : ''}">
+                    <i class="fa fa-circle" ng-style="{'color': service.wip ? '#ff9c01' : service.Status === 'Failure' ? 'red' : service.Status === 'Running' ? '#19aa8d' : '#c9c9c9'}"></i> {{service.ShortName}}<small ng-show="service.wipaction && service.wipaction !== ''" class="text-success"> [{{service.wipaction}}]</small>
+                  </a>
+                     <switch ng-hide="service.wip" ng-click="startStop(service);" style="color:#19aa8d; margin-top: -25px;font-size:20px;" toggle="service.Status === 'Running'" class="pull-right"/>
+                     <loader working="service.wip" style="margin-right: 10px;margin-top: -25px; width:20px; height:20px"class="pull-right"/>
                   </li>
 
                 </ul>
-
               </div>
 
               <ul class="category-list m-b-md" style="padding: 0">
@@ -64,8 +82,8 @@
         <div class="mail-box-header">
 
 
-          <h2>
-                  {{main.selectedService.Name}}
+              <h2>
+                  <span class="label" style="font-size: 15px; color:#fff;background-color: {{main.selectedService.GroupColor}}">{{main.selectedService.Group}}</span> <span> {{main.selectedService.Name}} </span>
               </h2>
           <div class="mail-tools tooltip-demo m-t-md">
             <div class="btn-group pull-right">
@@ -82,7 +100,7 @@
         </div>
         <div class="mail-box">
 
-          <table class="table table-hover table-mail">
+          <!-- <table class="table table-hover table-mail">
             <tbody>
               <tr class="unread">
                 <td class="check-mail">
@@ -256,7 +274,7 @@
                 <td class="text-right mail-date">Jun 11</td>
               </tr>
             </tbody>
-          </table>
+          </table> -->
 
 
         </div>

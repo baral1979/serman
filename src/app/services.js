@@ -2,7 +2,23 @@
 
 angular.module('serman')
   .service('Services', function($http) {
+
+    this.submitAction = function (action) {
+      return $http({
+        method: 'POST',
+        data: action,
+        url: '/api/services'
+      });
+    };
+
     this.getServices = function getServices() {
+
+      return $http({
+        method: 'GET',
+        datatype: 'jsonp',
+        url: '/api/services'
+      });
+
       return [{
         "ConnectionStringFile": "csPosteAlex.config",
         "ShortName": " Information Catalog ",
